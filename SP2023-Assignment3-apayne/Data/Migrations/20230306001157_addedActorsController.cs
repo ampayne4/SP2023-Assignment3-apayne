@@ -18,7 +18,7 @@ namespace SP2023_Assignment3_apayne.Data.Migrations
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
                     IMDB = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Photo = table.Column<byte>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

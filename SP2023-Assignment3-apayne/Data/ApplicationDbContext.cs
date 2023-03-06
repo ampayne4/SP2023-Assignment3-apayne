@@ -12,5 +12,6 @@ namespace SP2023_Assignment3_apayne.Data
         }
         public DbSet<SP2023_Assignment3_apayne.Models.Movie> Movie { get; set; }
         public DbSet<SP2023_Assignment3_apayne.Models.Actor> Actor { get; set; }
+        public DbSet<SP2023_Assignment3_apayne.Models.MovieActor> MovieActor { get; set; }
     }
 }
