@@ -72,6 +72,19 @@ namespace SP2023_Assignment3_apayne.Controllers
             return View(actor);
         }
 
+        public async Task<IActionResult> GetActorPhoto(int id)
+        {
+            var actor = await _context.Actor
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (actor == null)
+            {
+                return NotFound();
+            }
+            var imageData = actor.Photo;
+
+            return File(imageData, "image/jpg");
+        }
+
         // GET: Actors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -93,7 +106,7 @@ namespace SP2023_Assignment3_apayne.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Gender,Age,IMDB,Photo")] Actor actor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Gender,Age,IMDB")] Actor actor)
         {
             if (id != actor.Id)
             {

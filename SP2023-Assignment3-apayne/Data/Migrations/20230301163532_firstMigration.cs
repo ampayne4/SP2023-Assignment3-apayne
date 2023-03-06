@@ -18,7 +18,7 @@ namespace SP2023_Assignment3_apayne.Data.Migrations
                     IMDB = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReleaseYear = table.Column<int>(type: "int", nullable: true),
-                    Poster = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Poster = table.Column<byte>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

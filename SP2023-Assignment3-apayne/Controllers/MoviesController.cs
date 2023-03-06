@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -54,15 +55,35 @@ namespace SP2023_Assignment3_apayne.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,IMDB,Genre,ReleaseYear,Poster")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,IMDB,Genre,ReleaseYear")] Movie movie, IFormFile Poster)
         {
             if (ModelState.IsValid)
             {
+                if (Poster != null && Poster.Length > 0)
+                {
+                    var memoryStream = new MemoryStream();
+                    await Poster.CopyToAsync(memoryStream);
+                    movie.Poster = memoryStream.ToArray();
+                }
+
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
+        }
+
+        public async Task<IActionResult> GetMoviePoster(int id)
+        {
+            var movie = await _context.Movie
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            var imageData = movie.Poster;
+
+            return File(imageData, "image/jpg");
         }
 
         // GET: Movies/Edit/5
@@ -86,7 +107,7 @@ namespace SP2023_Assignment3_apayne.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IMDB,Genre,ReleaseYear,Poster")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IMDB,Genre,ReleaseYear")] Movie movie)
         {
             if (id != movie.Id)
             {
