@@ -23,6 +23,11 @@ namespace SP2023_Assignment3_apayne.Controllers
             return View();
         }
 
+        /*public IActionResult Movies()
+        {
+            return View();
+        }*/
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
