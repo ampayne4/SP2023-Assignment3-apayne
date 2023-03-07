@@ -39,8 +39,11 @@ namespace SP2023_Assignment3_apayne.Controllers
             {
                 return NotFound();
             }
+            ActorMoviesVM actorMoviesVM = new ActorMoviesVM();
+            actorMoviesVM.Actor = actor;
+            actorMoviesVM.Movies = _context.Movie.Where(m => m.Id == actor.Id).ToList();
 
-            return View(actor);
+            return View(actorMoviesVM);
         }
 
         // GET: Actors/Create

@@ -1,4 +1,4 @@
-﻿@model SP2023_Assignment3_apayne.Models.Actor
+﻿@model SP2023_Assignment3_apayne.Models.ActorMoviesVM
 
 @{
     ViewData["Title"] = "Details";
@@ -11,38 +11,94 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Actor.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Actor.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
+            @Html.DisplayNameFor(model => model.Actor.Gender)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
+            @Html.DisplayFor(model => model.Actor.Gender)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
+            @Html.DisplayNameFor(model => model.Actor.Age)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Age)
+            @Html.DisplayFor(model => model.Actor.Age)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IMDB)
+            @Html.DisplayNameFor(model => model.Actor.IMDB)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IMDB)
+            @Html.DisplayFor(model => model.Actor.IMDB)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Photo)
+            @Html.DisplayNameFor(model => model.Actor.Photo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Photo)
+            @Html.DisplayFor(model => model.Actor.Photo);
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.Actor.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<h1>Movies</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Movies[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movies[0].IMDB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movies[0].Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movies[0].ReleaseYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movies[0].Poster)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Movies)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IMDB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReleaseYear)
+                </td>
+                <td>
+                    @if (item.Poster != null)
+                    {
+                        @*var base64 = Convert.ToBase64String(item.Photo);
+                var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                <img src = "@imgSrc" height = "100" width="100" style="border-radius:50%" />*@
+
+                        <img width="100" height="100" src="@Url.Action("GetMoviePoster", "Movies", new {item.Id})" />
+                    }
+                </td>
+                @*<td>
+            @Html.DisplayFor(modelItem => item.Poster)
+            </td>*@
+            </tr>
+        }
+    </tbody>
+</table>

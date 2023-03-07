@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SP2023_Assignment3_apayne.Data;
+using Tweetinvi;
 
 namespace SP2023_Assignment3_apayne
 {
@@ -8,6 +9,11 @@ namespace SP2023_Assignment3_apayne
     {
         public static void Main(string[] args)
         {
+            // TweetInvi commands
+            var userClient = new TwitterClient("AAx9UfdCemph0Pg0t8Moq5c6L", "LbhoERpFGjBESYSNjTHuRvE0R80cGxZBx5lJWanM5lFpO2Hs63", "1455230009153503238-WTxQgoYUAQ3D9PTSsUu8stHkmJvuVe", "2ZVnM9tWbCSNAhyJcyC4WPIgiIbUWZ77MTLSx2Qb8TkW3");
+            /*var searchResponse = await userClient.SearchV2.SearchTweetsAsync("hello");
+            var tweets = searchResponse.Tweets;*/
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
