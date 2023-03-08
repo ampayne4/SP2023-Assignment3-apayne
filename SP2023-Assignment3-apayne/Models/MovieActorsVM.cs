@@ -4,5 +4,8 @@
     {
         public Movie Movie { get; set; }
         public List<MovieActor> MovieActor { get; set; }
+        public List<Tweet> Tweets { get; set; }
+        public double Sentiment { get; set; }
+
     }
 }

@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SP2023_Assignment3_apayne.Data;
 using SP2023_Assignment3_apayne.Models;
+using Tweetinvi;
 using Tweetinvi.Core.Injectinvi;
+using VaderSharp2;
 
 namespace SP2023_Assignment3_apayne.Controllers
 {
@@ -43,7 +45,33 @@ namespace SP2023_Assignment3_apayne.Controllers
             }
             MovieActorsVM movieActorsVM = new MovieActorsVM();
             movieActorsVM.Movie = movie;
-            movieActorsVM.MovieActor = _context.MovieActor.Where(m => m.MovieID == movie.Id).Include(m => m.Actor).ToList();
+            movieActorsVM.MovieActor = _context.MovieActor.Where(a => a.MovieID == movie.Id).Include(a => a.Actor).ToList();
+
+            var userClient = new TwitterClient("AAx9UfdCemph0Pg0t8Moq5c6L", "LbhoERpFGjBESYSNjTHuRvE0R80cGxZBx5lJWanM5lFpO2Hs63", "1455230009153503238-WTxQgoYUAQ3D9PTSsUu8stHkmJvuVe", "2ZVnM9tWbCSNAhyJcyC4WPIgiIbUWZ77MTLSx2Qb8TkW3");
+            var searchResponse = await userClient.SearchV2.SearchTweetsAsync(movie.Title);
+            var tweets = searchResponse.Tweets;
+            var analyzer = new SentimentIntensityAnalyzer();
+
+            List<Tweet> tweetsForVM = new List<Tweet>();
+            double nonZeroTweetSentiment = 0;
+            int nonZeroTweetCount = 0;
+            for (int i = 0; i < tweets.Length; i++)
+            {
+                var tweet = new Tweet();
+                tweet.Text = tweets[i].Text;
+                var results = analyzer.PolarityScores(tweets[i].Text);
+                tweet.Sentiment = results.Compound;
+                if (tweet.Sentiment != 0)
+                {
+                    nonZeroTweetCount++;
+                    nonZeroTweetSentiment += tweet.Sentiment;
+                }
+                tweetsForVM.Add(tweet);
+            }
+            double totalSentiment = nonZeroTweetSentiment / nonZeroTweetCount;
+            movieActorsVM.Sentiment = Math.Round(totalSentiment, 3);
+
+            movieActorsVM.Tweets = tweetsForVM;
 
             return View(movieActorsVM);
         }

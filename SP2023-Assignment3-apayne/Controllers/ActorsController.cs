@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SP2023_Assignment3_apayne.Data;
 using SP2023_Assignment3_apayne.Models;
+using Tweetinvi;
+using VaderSharp2;
 
 namespace SP2023_Assignment3_apayne.Controllers
 {
@@ -42,6 +44,34 @@ namespace SP2023_Assignment3_apayne.Controllers
             ActorMoviesVM actorMoviesVM = new ActorMoviesVM();
             actorMoviesVM.Actor = actor;
             actorMoviesVM.MovieActor = _context.MovieActor.Where(m => m.ActorID == actor.Id).Include(m => m.Movie).ToList();
+
+            var userClient = new TwitterClient("AAx9UfdCemph0Pg0t8Moq5c6L", "LbhoERpFGjBESYSNjTHuRvE0R80cGxZBx5lJWanM5lFpO2Hs63", "1455230009153503238-WTxQgoYUAQ3D9PTSsUu8stHkmJvuVe", "2ZVnM9tWbCSNAhyJcyC4WPIgiIbUWZ77MTLSx2Qb8TkW3");
+            var searchResponse = await userClient.SearchV2.SearchTweetsAsync(actor.Name);
+            var tweets = searchResponse.Tweets;
+            var analyzer = new SentimentIntensityAnalyzer();
+
+            List<Tweet> tweetsForVM = new List<Tweet>();
+            double nonZeroTweetSentiment = 0;
+            int nonZeroTweetCount = 0;
+
+            for(int i = 0; i < tweets.Length; i++)
+            {
+                var tweet = new Tweet();
+                tweet.Text = tweets[i].Text;
+                var results = analyzer.PolarityScores(tweets[i].Text);
+                tweet.Sentiment = results.Compound;
+                if (tweet.Sentiment != 0)
+                {
+                    nonZeroTweetCount++;
+                    nonZeroTweetSentiment += tweet.Sentiment;
+
+                }
+                tweetsForVM.Add(tweet);
+            }
+            double totalSentiment = nonZeroTweetSentiment / nonZeroTweetCount;
+            actorMoviesVM.Sentiment = Math.Round(totalSentiment, 3);
+
+            actorMoviesVM.Tweets = tweetsForVM;
 
             return View(actorMoviesVM);
         }
