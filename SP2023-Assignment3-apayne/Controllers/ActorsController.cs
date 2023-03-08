@@ -41,7 +41,7 @@ namespace SP2023_Assignment3_apayne.Controllers
             }
             ActorMoviesVM actorMoviesVM = new ActorMoviesVM();
             actorMoviesVM.Actor = actor;
-            actorMoviesVM.Movies = _context.Movie.Where(m => m.Id == actor.Id).ToList();
+            actorMoviesVM.MovieActor = _context.MovieActor.Where(m => m.ActorID == actor.Id).Include(m => m.Movie).ToList();
 
             return View(actorMoviesVM);
         }

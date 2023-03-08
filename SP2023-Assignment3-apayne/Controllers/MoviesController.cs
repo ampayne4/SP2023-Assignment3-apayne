@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SP2023_Assignment3_apayne.Data;
 using SP2023_Assignment3_apayne.Models;
+using Tweetinvi.Core.Injectinvi;
 
 namespace SP2023_Assignment3_apayne.Controllers
 {
@@ -40,8 +41,11 @@ namespace SP2023_Assignment3_apayne.Controllers
             {
                 return NotFound();
             }
+            MovieActorsVM movieActorsVM = new MovieActorsVM();
+            movieActorsVM.Movie = movie;
+            movieActorsVM.MovieActor = _context.MovieActor.Where(m => m.MovieID == movie.Id).Include(m => m.Actor).ToList();
 
-            return View(movie);
+            return View(movieActorsVM);
         }
 
         // GET: Movies/Create
